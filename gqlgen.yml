@@ -1,0 +1,23 @@
+# .gqlgen.yml example
+#
+# Refer to https://gqlgen.com/config/
+# for detailed .gqlgen.yml documentation.
+
+schema:
+- schema.graphql
+exec:
+  filename: generated.go
+model:
+  filename: models/models_gen.go
+  package: models
+resolver:
+  filename: resolver/resolver.go
+  type: Resolver
+autobind:
+  - github.com/alterra/graphql-server/models
+
+models:
+  Todo:
+    fields:
+      user:
+        resolver: true # force a resolver to be generated
