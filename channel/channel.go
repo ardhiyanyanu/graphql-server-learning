@@ -9,16 +9,31 @@ import (
 var once sync.Once
 
 var (
-	instance chan *model.Todo
+	channels map[string]chan *model.Todo
+	mutex    sync.Mutex
 )
 
-func NewClass() chan *model.Todo {
+func NewChannel(key string) chan *model.Todo {
+	if channels == nil {
+		channels = make(map[string]chan *model.Todo)
+	}
 
-	once.Do(func() { // <-- atomic, does not allow repeating
+	channel := make(chan *model.Todo, 1)
+	mutex.Lock()
+	channels[key] = channel
+	mutex.Unlock()
 
-		instance = make(chan *model.Todo, 100) // <-- thread safe
+	return channel
+}
 
-	})
+func DeleteChannel(key string) {
+	mutex.Lock()
+	delete(channels, key)
+	mutex.Unlock()
+}
 
-	return instance
+func PublishAll(todo *model.Todo) {
+	for _, v := range channels {
+		v <- todo
+	}
 }

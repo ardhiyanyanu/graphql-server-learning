@@ -2,18 +2,17 @@ package resolver
 
 import (
 	"context"
-	"sync"
 
 	graphql_server "github.com/alterra/graphql-server"
 	"github.com/alterra/graphql-server/channel"
 	model "github.com/alterra/graphql-server/models"
 	todo "github.com/alterra/graphql-server/resolver/todo"
+	"github.com/google/uuid"
 )
 
 // THIS CODE IS A STARTING POINT ONLY. IT WILL NOT BE UPDATED WITH SCHEMA CHANGES.
 
 type Resolver struct {
-	mutex sync.Mutex
 }
 
 func (r *Resolver) Mutation() graphql_server.MutationResolver {
@@ -33,7 +32,7 @@ type mutationResolver struct{ *Resolver }
 
 func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
 	result, err := todo.CreateTodo(input)
-	channel.NewClass() <- result
+	channel.PublishAll(result)
 	return result, err
 }
 
@@ -55,5 +54,15 @@ func (r *todoResolver) User(ctx context.Context, todo *model.Todo) (*model.User,
 type subscriptionResolver struct{ *Resolver }
 
 func (r *subscriptionResolver) TodoCreated(ctx context.Context) (<-chan *model.Todo, error) {
-	return channel.NewClass(), nil
+	uniqueKey := uuid.Must(uuid.NewRandom()).String()
+	// Create new channel for request
+	c := channel.NewChannel(uniqueKey)
+
+	// Delete channel when done
+	go func() {
+		<-ctx.Done()
+		channel.DeleteChannel(uniqueKey)
+	}()
+
+	return c, nil
 }
