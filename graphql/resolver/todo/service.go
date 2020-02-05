@@ -3,7 +3,7 @@ package service
 import (
 	"strconv"
 
-	model "github.com/alterra/graphql-server/models"
+	model "github.com/alterra/graphql-server/graphql/models"
 )
 
 var temp []*model.Todo

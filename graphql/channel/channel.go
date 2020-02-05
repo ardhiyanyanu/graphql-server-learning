@@ -3,7 +3,7 @@ package channel
 import (
 	"sync"
 
-	model "github.com/alterra/graphql-server/models"
+	model "github.com/alterra/graphql-server/graphql/models"
 )
 
 var once sync.Once

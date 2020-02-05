@@ -6,7 +6,7 @@ import (
 
 	"github.com/99designs/gqlgen/handler"
 	graphql_server "github.com/alterra/graphql-server"
-	"github.com/alterra/graphql-server/resolver"
+	"github.com/alterra/graphql-server/graphql/resolver"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"

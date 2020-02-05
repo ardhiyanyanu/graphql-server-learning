@@ -8,13 +8,13 @@ schema:
 exec:
   filename: generated.go
 model:
-  filename: models/models_gen.go
+  filename: graphql/models/models_gen.go
   package: models
 resolver:
-  filename: resolver/resolver.go
+  filename: graphql/resolver/resolver.go
   type: Resolver
 autobind:
-  - github.com/alterra/graphql-server/models
+  - github.com/alterra/graphql-server/graphql/models
 
 models:
   Todo:

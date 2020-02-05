@@ -4,9 +4,9 @@ import (
 	"context"
 
 	graphql_server "github.com/alterra/graphql-server"
-	"github.com/alterra/graphql-server/channel"
-	model "github.com/alterra/graphql-server/models"
-	todo "github.com/alterra/graphql-server/resolver/todo"
+	"github.com/alterra/graphql-server/graphql/channel"
+	model "github.com/alterra/graphql-server/graphql/models"
+	todo "github.com/alterra/graphql-server/graphql/resolver/todo"
 	"github.com/google/uuid"
 )
 
