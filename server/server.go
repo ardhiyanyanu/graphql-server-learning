@@ -4,9 +4,12 @@ import (
 	"net/http"
 	"time"
 
+	usermanagement "github.com/alterra/graphql-server/usermanagement"
+
 	"github.com/99designs/gqlgen/handler"
 	graphql_server "github.com/alterra/graphql-server"
 	"github.com/alterra/graphql-server/graphql/resolver"
+	"github.com/alterra/graphql-server/server/middlewares"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
@@ -17,7 +20,6 @@ func graphqlHandler() gin.HandlerFunc {
 	// NewExecutableSchema and Config are in the generated.go file
 	// Resolver is in the resolver.go file
 	h := handler.GraphQL(graphql_server.NewExecutableSchema(graphql_server.Config{Resolvers: &resolver.Resolver{}}),
-		// handler.WebsocketKeepAliveDuration(19*time.Second),
 		handler.WebsocketKeepAliveDuration(20*time.Second),
 		handler.WebsocketUpgrader(websocket.Upgrader{CheckOrigin: func(r *http.Request) bool { return true }}))
 
@@ -46,6 +48,9 @@ func main() {
 	// Setting up Gin
 	r := gin.Default()
 
+	// Recovery middleware recovers from any panics and writes a 500 if there was one.
+	r.Use(gin.Recovery())
+
 	// r.Use(gin.BasicAuth(gin.Accounts{
 	// 	"foo":    "bar",
 	// 	"austin": "1234",
@@ -59,8 +64,16 @@ func main() {
 		AllowHeaders: []string{"*"},
 	}))
 
-	r.POST("/query", graphqlHandler())
-	r.GET("/query", graphqlHandler())
+	graphQL := r.Group("/query")
+	graphQL.Use(middlewares.IsLoggedIn())
+	graphQL.Use(middlewares.GinContextToContextMiddleware())
+	graphQL.POST("/", graphqlHandler())
+	graphQL.GET("/", graphqlHandler())
+
 	r.GET("/", playgroundHandler())
+
+	user := r.Group("/user")
+	usermanagement.GetRoute(user)
+
 	r.Run()
 }
