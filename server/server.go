@@ -51,13 +51,6 @@ func main() {
 	// Recovery middleware recovers from any panics and writes a 500 if there was one.
 	r.Use(gin.Recovery())
 
-	// r.Use(gin.BasicAuth(gin.Accounts{
-	// 	"foo":    "bar",
-	// 	"austin": "1234",
-	// 	"lena":   "hello2",
-	// 	"manu":   "4321",
-	// }))
-
 	r.Use(cors.New(cors.Config{
 		AllowOrigins: []string{"*"},
 		AllowMethods: []string{"GET", "POST", "PUT", "PATCH", "OPTION"},
@@ -68,7 +61,7 @@ func main() {
 	graphQL.Use(middlewares.IsLoggedIn())
 	graphQL.Use(middlewares.GinContextToContextMiddleware())
 	graphQL.POST("/", graphqlHandler())
-	graphQL.GET("/", graphqlHandler())
+	r.GET("/query", graphqlHandler())
 
 	r.GET("/", playgroundHandler())
 

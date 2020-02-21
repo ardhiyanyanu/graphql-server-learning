@@ -2,9 +2,26 @@
 
 package models
 
+import (
+	"time"
+)
+
 type NewTodo struct {
 	Text   string `json:"text"`
 	UserID string `json:"userId"`
+}
+
+type Product struct {
+	ProductID     string     `json:"productId"`
+	Description   *string    `json:"description"`
+	CustomerID    string     `json:"customerId"`
+	Name          string     `json:"name"`
+	ProductType   *string    `json:"productType"`
+	ProductTypeID *int       `json:"productTypeId"`
+	CreatedBy     *string    `json:"createdBy"`
+	UpdatedBy     *string    `json:"updatedBy"`
+	CreatedAt     *time.Time `json:"createdAt"`
+	UpdatedAt     *time.Time `json:"updatedAt"`
 }
 
 type Todo struct {

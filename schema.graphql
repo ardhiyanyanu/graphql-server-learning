@@ -15,6 +15,7 @@ type User {
 }
 
 type Query {
+  getAllProduct: [Product]!
   todos: [Todo!]!
 }
 
@@ -30,3 +31,18 @@ type Mutation {
 type Subscription {
   todoCreated: Todo!
 }
+
+type Product {
+  productId: ID!
+  description: String
+  customerId: String!
+  name: String!
+  productType: String
+  productTypeId: Int
+  createdBy: String
+  updatedBy: String
+  createdAt: Time
+  updatedAt: Time
+}
+
+scalar Time

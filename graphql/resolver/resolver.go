@@ -7,6 +7,7 @@ import (
 	graphql_server "github.com/alterra/graphql-server"
 	"github.com/alterra/graphql-server/graphql/channel"
 	model "github.com/alterra/graphql-server/graphql/models"
+	"github.com/alterra/graphql-server/graphql/resolver/product"
 	todo "github.com/alterra/graphql-server/graphql/resolver/todo"
 	"github.com/google/uuid"
 )
@@ -50,6 +51,10 @@ type queryResolver struct{ *Resolver }
 
 func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
 	return todo.Todos()
+}
+
+func (r *queryResolver) GetAllProduct(ctx context.Context) ([]*model.Product, error) {
+	return product.GetAllProduct()
 }
 
 type todoResolver struct{ *Resolver }

@@ -2,6 +2,7 @@ package middlewares
 
 import (
 	"context"
+	"fmt"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -11,7 +12,8 @@ import (
 
 func IsLoggedIn() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		authHeader := c.Request.Header.Get("Authorization")
+		authHeader := c.Request.Header.Get("authorization")
+		fmt.Println("AuthHeader: " + authHeader)
 
 		if authHeader == "" {
 			c.Header("WWW-Authenticate", "JWT realm=")
@@ -53,6 +55,8 @@ func IsLoggedIn() gin.HandlerFunc {
 		for key, value := range parsedToken.Claims.(jwt.MapClaims) {
 			claims[key] = value
 		}
+
+		fmt.Println("Claims: " + fmt.Sprintf("%v", claims))
 
 		ctx := context.WithValue(c.Request.Context(), "GinContextKey", c)
 		c.Request = c.Request.WithContext(ctx)
