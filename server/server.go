@@ -9,7 +9,6 @@ import (
 	"github.com/99designs/gqlgen/handler"
 	graphql_server "github.com/alterra/graphql-server"
 	"github.com/alterra/graphql-server/graphql/resolver"
-	"github.com/alterra/graphql-server/server/middlewares"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
@@ -57,10 +56,10 @@ func main() {
 		AllowHeaders: []string{"*"},
 	}))
 
-	graphQL := r.Group("/query")
-	graphQL.Use(middlewares.IsLoggedIn())
-	graphQL.Use(middlewares.GinContextToContextMiddleware())
-	graphQL.POST("/", graphqlHandler())
+	// graphQL := r.Group("/query")
+	// graphQL.Use(middlewares.IsLoggedIn())
+	// graphQL.Use(middlewares.GinContextToContextMiddleware())
+	r.POST("/query", graphqlHandler())
 	r.GET("/query", graphqlHandler())
 
 	r.GET("/", playgroundHandler())

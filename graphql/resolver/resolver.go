@@ -2,7 +2,6 @@ package resolver
 
 import (
 	"context"
-	"fmt"
 
 	graphql_server "github.com/alterra/graphql-server"
 	"github.com/alterra/graphql-server/graphql/channel"
@@ -33,11 +32,11 @@ func (r *Resolver) Subscription() graphql_server.SubscriptionResolver {
 type mutationResolver struct{ *Resolver }
 
 func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
-	gc, err := GinContextFromContext(ctx)
-	if err != nil {
-		return nil, err
-	}
-	fmt.Println("context: " + fmt.Sprintf("%v", gc.Value("claims")))
+	// gc, err := GinContextFromContext(ctx)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// fmt.Println("context: " + fmt.Sprintf("%v", gc.Value("claims")))
 
 	// Do something with claims
 	// like checking customer id etc
